@@ -47,6 +47,7 @@ public class Main extends Game {
             object.draw(this);
         }
         player.draw(this);
+        new ScoreLine().drawScoreLine(score,this);
     }
 
     private void drawField() {
@@ -68,10 +69,10 @@ public class Main extends Game {
     @Override
     public void onKeyPress(Key key) {
         if (key == Key.LEFT) {
-            if (player.x>LEFT_WALL+1) player.x--;
+            if (player.x>LEFT_WALL+1) player.x-=2;
         }
         if (key==Key.RIGHT){
-            if (player.x+ player.width<RIGHT_WALL)player.x++;
+            if (player.x+ player.width<RIGHT_WALL)player.x+=2;
         }
         if (key==Key.SPACE){
             createGame();
@@ -122,7 +123,10 @@ public class Main extends Game {
     }
 
     private GameObject createNewObject() {
-        GameObject o = new GameObject(0,0,GameObjectType.values()[getRandomNumber(settings.GAME_OBJECT_TYPES-1)]);
+        GameObject o = new GameObject(0,0,GameObjectType.values()[getRandomNumber(settings.GAME_OBJECT_TYPES-2)]);
+        if (o.type==GameObjectType.CRAZY_DRIVER){
+            o = new GameObject(0,0,GameObjectType.values()[getRandomNumber(settings.GAME_OBJECT_TYPES-2)]);
+        }
         o.y=-o.height;
         o.x=getRandomNumber(LEFT_WALL,RIGHT_WALL-o.width);
         return o;
@@ -140,6 +144,15 @@ public class Main extends Game {
                 object.y=-1000000000;
             }
             i++;
+        }
+        moveCrazyDriver();
+    }
+
+    private void moveCrazyDriver() {
+        for (GameObject object : objects) {
+            if(object.type==GameObjectType.CRAZY_DRIVER){
+                object.x+=getRandomNumber(-1,2);
+            }
         }
     }
 
