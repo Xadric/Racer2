@@ -10,6 +10,7 @@ public class GameObject {
     public int[][]skin;
     public int speed;
     public boolean isAlive;
+    public int crazyCarDX;
 
 
     public GameObject(int x, int y, GameObjectType type) {
@@ -21,6 +22,9 @@ public class GameObject {
         this.type = type;
         this.speed=getSpeed(type);
         this.isAlive=true;
+        if (type==GameObjectType.CRAZY_DRIVER){
+            crazyCarDX=0;
+        }
     }
 
     private int getSpeed(GameObjectType type) {

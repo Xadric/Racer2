@@ -151,7 +151,19 @@ public class Main extends Game {
     private void moveCrazyDriver() {
         for (GameObject object : objects) {
             if(object.type==GameObjectType.CRAZY_DRIVER){
-                object.x+=getRandomNumber(-1,2);
+                object.x+= object.crazyCarDX;
+                if (object.y>0 && object.crazyCarDX ==0){
+                    object.crazyCarDX =1;
+                }
+                if (object.x<LEFT_WALL+1 || object.x+object.width>=RIGHT_WALL){
+                    object.crazyCarDX=-object.crazyCarDX;
+                }
+                for (GameObject object2 : objects) {
+                    if (object!=object2)
+                    if ((object.x+object.width==object2.x ||object.x==object2.x+object2.width)&& (object.y>=object2.y &&object.y<=object2.y+object2.height ) ){
+                        object.crazyCarDX=-object.crazyCarDX;
+                    }
+                }
             }
         }
     }
