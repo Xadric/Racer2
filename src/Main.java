@@ -45,12 +45,12 @@ public class Main extends Game {
 
     private void drawScrene() {
         drawField();
+        finalLine.draw(this);
         for (GameObject object : objects) {
             object.draw(this);
         }
         player.draw(this);
         new ScoreLine().drawScoreLine(score,this);
-        finalLine.draw(this);
     }
 
     private void drawField() {
@@ -105,7 +105,7 @@ public class Main extends Game {
     }
 
     private void cheakWin() {
-        if (score>settings.WIN_NUMBER){
+        if (player.y< finalLine.y){
             showMessageDialog(Color.BLUE,"YOU WIN!!!",Color.RED,75);
             createGame();
         }
