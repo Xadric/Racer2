@@ -15,6 +15,7 @@ public class Main extends Game {
     private int speed = settings.BASIC_SPEED;
     private int score;
     private boolean canScoreUp=true;
+    private FinalLine finalLine;
 
     @Override
     public void initialize() {
@@ -32,6 +33,7 @@ public class Main extends Game {
         objects.add(createNewObject());
         objects.add(createNewObject());
         objects.add(createNewObject());
+        finalLine=new FinalLine();
         drawScrene();
     }
 
@@ -48,6 +50,7 @@ public class Main extends Game {
         }
         player.draw(this);
         new ScoreLine().drawScoreLine(score,this);
+        finalLine.draw(this);
     }
 
     private void drawField() {
@@ -76,6 +79,9 @@ public class Main extends Game {
         }
         if (key==Key.SPACE){
             createGame();
+        }
+        if (key==Key.UP){
+            score=48;
         }
         drawScrene();
     }
@@ -146,6 +152,9 @@ public class Main extends Game {
             i++;
         }
         moveCrazyDriver();
+        if (score + objects.size()>settings.WIN_NUMBER){
+            finalLine.move();
+        }
     }
 
     private void moveCrazyDriver() {

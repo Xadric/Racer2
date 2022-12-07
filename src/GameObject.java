@@ -30,7 +30,7 @@ public class GameObject {
     private int getSpeed(GameObjectType type) {
         if (type==GameObjectType.BUSH)return 1;
         if (type==GameObjectType.TRUCK)return 2;
-        if (type==GameObjectType.CRAZY_DRIVER)return 2;
+        if (type==GameObjectType.CRAZY_DRIVER)return 1;
         return 0;
     }
 
@@ -47,8 +47,6 @@ public class GameObject {
     }
 
     public void move() {
-
-            y+=speed;
-
+        y += speed;
     }
 }
