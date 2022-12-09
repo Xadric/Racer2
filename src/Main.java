@@ -16,6 +16,8 @@ public class Main extends Game {
     private int score;
     private boolean canScoreUp=true;
     private FinalLine finalLine;
+    private boolean canCreateNewObjects;
+    private int haveFew;
 
     @Override
     public void initialize() {
@@ -25,8 +27,10 @@ public class Main extends Game {
     }
 
     private void createGame() {
+        canCreateNewObjects=true;
         score=0;
-        setScore(score);
+        haveFew=3000;
+        setScore(haveFew);
         setTurnTimer(speed);
         createPlayer();
         objects = new ArrayList<>();
@@ -81,9 +85,27 @@ public class Main extends Game {
             createGame();
         }
         if (key==Key.UP){
-            score=48;
+            speedUp();
         }
         drawScrene();
+    }
+
+    private void speedUp() {
+        int i=0;
+        for (GameObject object : objects) {
+            object.move();
+            if (object.y > HEIGHT) {
+                objects.get(i).isAlive = false;
+                score++;
+                canScoreUp = true;
+                object.y = -1000000000;
+            }
+            i++;
+        }
+        if (score + objects.size()>settings.WIN_NUMBER){
+            finalLine.move();
+            canCreateNewObjects=false;
+        }
     }
 
     @Override
@@ -93,6 +115,8 @@ public class Main extends Game {
         drawScrene();
         cheakWin();
         cheakColision();
+        haveFew--;
+        setScore(haveFew);
     }
 
     private void cheakColision() {
@@ -112,18 +136,20 @@ public class Main extends Game {
     }
 
     private void tryToMakeNewObject() {
-        for (GameObject object : objects) {
-            if (!object.isAlive){
-                if (getRandomNumber(10)==0){
-                    objects.remove(object);
-                    objects.add(createNewObject());
+        if (canCreateNewObjects) {
+            for (GameObject object : objects) {
+                if (!object.isAlive) {
+                    if (getRandomNumber(10) == 0) {
+                        objects.remove(object);
+                        objects.add(createNewObject());
+                    }
                 }
             }
-        }
-        if (score%15==0 &&score!=0){
-            if (canScoreUp) {
-                objects.add(createNewObject());
-                canScoreUp=false;
+            if (score % 15 == 0 && score != 0) {
+                if (canScoreUp) {
+                    objects.add(createNewObject());
+                    canScoreUp = false;
+                }
             }
         }
     }
@@ -145,7 +171,6 @@ public class Main extends Game {
             if (object.y>HEIGHT){
                 objects.get(i).isAlive=false;
                 score++;
-                setScore(score);
                 canScoreUp=true;
                 object.y=-1000000000;
             }
@@ -154,6 +179,7 @@ public class Main extends Game {
         moveCrazyDriver();
         if (score + objects.size()>settings.WIN_NUMBER){
             finalLine.move();
+            canCreateNewObjects=false;
         }
     }
 
